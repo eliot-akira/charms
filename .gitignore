@@ -1,0 +1,16 @@
+# App-specific
+
+/build
+/data
+
+# Alway ignore
+
+.env.production
+.env.*.local
+
+_*
+node_modules
+.cache*
+*.log
+*.lock
+*-lock.json
