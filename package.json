@@ -12,7 +12,7 @@
     "test": "yarn build && node build/test",
     "type": "tsc --noEmit",
     "clean": "rm -rf build",
-    "release": "yarn build && cp package.json build && cp readme.md build && cd build"
+    "release": "yarn build && cp package.json build && cp readme.md build && cd build && npm publish --access public"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
