@@ -1,6 +1,6 @@
 import Highlight, { defaultProps } from 'prism-react-renderer'
 import Prism from 'prism-react-renderer/prism'
-import 'charms/prism/themes/light.scss'
+// import 'charms/prism/themes/light.scss'
 
 // https://mdxjs.com/guides/syntax-highlighting
 
