@@ -22,11 +22,7 @@ export const move = function(src, dst) {
       reject(new TypeError('First argument must be an upload file object'))
     }
 
-    src.mv(dst, err => {
-      if (err) return reject(err)
-
-      resolve()
-    })
+    src.mv(dst, err => err ? reject(err) : resolve())
   })
 }
 
