@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { Component, useEffect, useMemo } from 'react'
 import { withRouter } from 'react-router'
 import { Link } from 'charms/router'
 import { Helmet } from 'react-helmet-async'
@@ -11,7 +11,7 @@ import CodeBlock from '../components/CodeBlock'
 
 const defaultMeta = {
   defaultTitle: 'App',
-  titleTemplate: '%s | App',
+  // titleTemplate: '%s | App',
   htmlAttributes: { lang: 'en' },
   meta: [
     { name: 'description', content: '' }
@@ -53,6 +53,18 @@ const defaultMarkdownComponents = {
   }
 }
 
+const ScrollTop = withRouter(class ScrollTopOnRouteChange extends Component {
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0)
+    }
+  }
+
+  render() {
+    return null
+  }
+})
+
 const Provider = ({
   store,
   routes,
@@ -68,14 +80,17 @@ const Provider = ({
     window.app = store
   }, [])
 
+  const Wrapper = markdownComponents.wrapper || defaultMarkdownComponents.wrapper
+
   // MDX file can export const meta, which is passed to Helmet
   const mdxComponents = useMemo(() => {
-    const Wrapper = markdownComponents.wrapper || defaultMarkdownComponents.wrapper
     return {
       ...defaultMarkdownComponents,
       ...markdownComponents,
-      wrapper: ({ meta, children }) =>
-        <Wrapper>
+      wrapper: ({ meta, children, ...props }) =>
+        <Wrapper {...{
+          meta, ...props
+        }}>
           { meta && <Helmet {...meta} /> }
           { children }
         </Wrapper>
@@ -87,17 +102,18 @@ const Provider = ({
   } = meta
 
   // Provide route-specific body classes
-  const bodyClassName = `app-route${
-    location.pathname==='/' ? '--home' : location.pathname.replace(/\//g, '--')
+  const bodyClassName = `route${
+    location.pathname==='/' ? '--home' : location.pathname.replace(/\/$/, '').replace(/\//g, '--')
   }`+(bodyAttributes.className ? ' '+bodyAttributes.className : '')
 
   return <MDXProvider components={mdxComponents}>
+    <ScrollTop />
     <Helmet {...{
       ...defaultMeta,
       ...meta,
       bodyAttributes: {
         ...bodyAttributes,
-        className: bodyClassName
+        class: bodyClassName
       }
     }} />
     { children }
