@@ -14,7 +14,7 @@ export default function Link({
   if (!to || to.indexOf(':') >= 0 /*to.match(externalUrl)*/) {
     return (
       <a {...{ ...props, href: to,
-        target: !to || to.indexOf('http')===0 ? undefined : '_self', // '_blank'
+        target: to && to.indexOf('http')===0 ? '_blank' : undefined, // '_self'
         children
       }} />
     )

@@ -15,7 +15,7 @@ export default ({ children = '', className = '' }) => {
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={className} style={style}>
           <code>{
-            tokens.slice(0, -1) // Last token is always empty
+            tokens
               .map((line, i) => (
                 <div key={i} {...getLineProps({ line, key: i })}>
                   {

@@ -1,13 +1,11 @@
 import type {
   Server as HttpServer,
-  IncomingMessage
+  IncomingMessage,
+  ServerResponse as Response
 } from 'http'
-import type {
-  Response,
-  Application
-} from 'express'
 import type { ReactNode } from 'react'
 import type { StoreCreatorProps } from 'medux'
+import type { Server as SocketServer } from 'socket.io'
 import type { AuthConfig } from './auth'
 import type { ContentConfig } from './content'
 
@@ -31,11 +29,12 @@ export type ServerProps = {
 
 type RouteDefinition = any // TODO
 
-export type App = Application & {
+export type App = RequestHandler & {
   shutdown?: () => void,
-  closeSocketServer?: () => void,
   port?: number,
+  io?: SocketServer,
   socketServer?: HttpServer,
+  closeSocketServer?: () => void,
   connectSocketServer?: (httpServer: HttpServer) => void
 }
 

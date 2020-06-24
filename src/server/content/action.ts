@@ -20,9 +20,10 @@ export const contentTypeActionCreator = ({
     ? (data: ActionData, context: ActionContext) => actionsConfig[actionName](data, context)
     // Default action
     : async (data: ActionData) => {
+      const action: (data: any) => Promise<any> = (datastore as any)[actionName]
       try {
         return {
-          result: await datastore[actionName](data)
+          result: await action(data)
         } as ActionSuccess
       } catch(e) {
         return {

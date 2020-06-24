@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import socketIo from 'socket.io'
 import React from 'react'
 import { send } from 'micro'
-import { withHandlers, serveStatic, withMethod } from './utils'
+import { withHandlers, serveStatic, withMethod, RequestHandler } from './utils'
 
 import { createAuth } from './auth'
 import { createContentApi } from './content'
@@ -18,7 +18,8 @@ import { provideJwtToken } from './middlewares/jwt'
 import { provideUser } from './middlewares/user'
 import { provideCookies } from './middlewares/cookies'
 
-import { App, HttpServer, ServerProps } from './types'
+import type { Server as SocketServer } from 'socket.io'
+import type { App, HttpServer, ServerProps } from './types'
 
 // Shortcut for import React from 'react'
 global.React = React
@@ -93,7 +94,7 @@ export async function createServer({
 
   // Server
 
-  const app = withHandlers(
+  const app: App = withHandlers(
     provideRouteContext,
 
     withRoute('/.well-known')(
@@ -121,7 +122,7 @@ export async function createServer({
 
   // WebSocket
 
-  app.connectSocketServer = async function(httpServer: HttpServer, previousApp = {}) {
+  app.connectSocketServer = async function(httpServer: HttpServer, previousApp: App = {}) {
 
     if (!socketHandler || !app) return
 
@@ -131,17 +132,21 @@ export async function createServer({
       ? http.createServer()
       : httpServer
 
+    // Remove previous event handlers for hot reload
     if (previousApp.io) {
-      previousApp.io.removeAllListeners() // Remove event handlers
+      previousApp.io.removeAllListeners()
     }
 
-    const io = previousApp.io || socketIo(socketServer)
+    const io: SocketServer = previousApp.io || socketIo(socketServer)
     app.io = io
 
     if (isDifferentPort) {
       socketServer.listen(socketPort)
     }
 
+    !previousApp.io && console.log(`WebSocket server listening at port ${socketPort}`)
+
+    // Close before reload
     app.closeSocketServer = () => new Promise((resolve, reject) => {
       if (isDifferentPort) {
         socketServer.close(resolve)
@@ -149,8 +154,6 @@ export async function createServer({
       }
       resolve()
     })
-
-    console.log(`WebSocket server listening at port ${socketPort}`)
 
     const socketContext = {
       auth,
