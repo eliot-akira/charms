@@ -14,7 +14,10 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "chalk": "^4.1.0",
+    "chokidar": "^3.4.0",
     "cookie": "^0.4.1",
+    "date-fns": "^2.14.0",
     "dotenv": "^8.2.0",
     "express-fileupload": "^1.1.7-alpha.3",
     "fetch-ponyfill": "^6.1.1",
