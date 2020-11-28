@@ -170,15 +170,22 @@ export const login: Action = async function(data, context) {
 export const logout: Action = async function(data, context) {
 
   const {
+    req,
     res,
     mode = 'cookie'
   } = context
 
-  if (mode==='cookie' && res) {
+  if (mode==='cookie' && req && res) {
+
+    const {
+      site
+    } = req.route
+
     // Clear cookie
     res.setHeader('Set-Cookie', makeCookie('jwt', '', {
       path: '/',
       maxAge: 0,
+      domain: site,
       sameSite: 'strict'
     }))
   }
