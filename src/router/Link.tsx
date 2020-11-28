@@ -11,10 +11,13 @@ export default function Link({
   to: string
 }) {
 
-  if (!to || to.indexOf(':') >= 0 /*to.match(externalUrl)*/) {
+  const isExternal = to && to.indexOf(':') >= 0 // to.match(externalUrl)
+  const isDownload = to && to.indexOf('.') >= 0
+
+  if (!to || isExternal || isDownload) {
     return (
       <a {...{ ...props, href: to,
-        target: to && to.indexOf('http')===0 ? '_blank' : undefined, // '_self'
+        target: isExternal || isDownload ? '_blank' : undefined, // '_self'
         children
       }} />
     )
