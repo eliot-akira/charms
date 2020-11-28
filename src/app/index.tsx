@@ -80,22 +80,23 @@ const Provider = ({
     window.app = store
   }, [])
 
-  const Wrapper = markdownComponents.wrapper || defaultMarkdownComponents.wrapper
-
   // MDX file can export const meta, which is passed to Helmet
   const mdxComponents = useMemo(() => {
+
+    const Wrapper = markdownComponents.wrapper || defaultMarkdownComponents.wrapper
+
     return {
       ...defaultMarkdownComponents,
       ...markdownComponents,
       wrapper: ({ meta, children, ...props }) =>
-        <Wrapper {...{
+        <Wrapper key="mdx-wrapper" {...{
           meta, ...props
         }}>
           { meta && <Helmet {...meta} /> }
           { children }
         </Wrapper>
     }
-  }, [markdownComponents])
+  }, [])
 
   const {
     bodyAttributes = {}
