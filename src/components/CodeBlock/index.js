@@ -10,12 +10,13 @@ export default ({ children = '', className = '' }) => {
   if (typeof children!=='string') {
     children = (children.props && children.props.children) || ''
   }
+
   return (
     <Highlight {...defaultProps} code={children} language={language || 'markup'} theme={undefined}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={className} style={style}>
           <code>{
-            tokens
+            tokens.slice(0, -1) // Remove extra new line at the end
               .map((line, i) => (
                 <div key={i} {...getLineProps({ line, key: i })}>
                   {

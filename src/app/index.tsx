@@ -31,7 +31,8 @@ const defaultMarkdownComponents = {
       <article className="mt-2 px-2 pb-3"  children={children} />
     </>
   ,
-  pre: CodeBlock,
+  pre: props => <div {...props} />,
+  code: CodeBlock,
   a: props => {
     const { href, children, ...moreProps } = props
     if (href && href[0]==='#') {

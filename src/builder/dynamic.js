@@ -22,11 +22,13 @@ module.exports = async function() {
   const routesDir = path.join(cwd, 'src', 'routes')
 
   const indexGlob = path.join(pagesDir, '**/{index,404}.{js,tsx,mdx}')
+  const ignoreGlob = '**/_*/**'
 
   const generate = async () => {
 
+    // @see https://github.com/sindresorhus/globby
     const allIndexes = await globby(
-      indexGlob
+      [indexGlob, `!${ignoreGlob}`]
     )
 
     const exportedMap = allIndexes.reduce((map, file) => {
@@ -107,6 +109,8 @@ export default {
   const watchOptions = {
     ignoreInitial: true,
     followSymlinks: true,
+
+    ignored: ignoreGlob,
 
     // Needed to detect when containing parent folder is removed
     usePolling: true,

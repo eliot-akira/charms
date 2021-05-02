@@ -26,6 +26,7 @@ export default function loadAsync(getComponent) {
       if (this.state.loaded) return
       AsyncComponent.loadComponent()
         .then(() => this.mounted && this.setState({ loaded: true }))
+        .catch(e => console.error('Async component', e))
     }
 
     componentDidMount() {

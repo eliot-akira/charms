@@ -1,6 +1,7 @@
 import { Actions } from '../content'
 import * as actions from './actions'
 import { cleanUser, isAdmin } from './utils'
+import type { ContentTypeConfig } from '../content/types'
 
 export const guestUser = {
   _id: 0,
@@ -47,7 +48,7 @@ const defaultItems = [
   }
 ]
 
-export const userTypeConfig = {
+export const userTypeConfig: ContentTypeConfig = {
   ensureIndex: [
     'name'
   ],
